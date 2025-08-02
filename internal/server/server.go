@@ -24,8 +24,8 @@ func Start() {
 		server.WithToolCapabilities(true),
 	)
 
-	log.Println("Adding tool capabilities...")
 	// Define a simple tool
+	log.Println("Adding chatbox tool...")
 	chatbox := mcp.NewTool("chatbox",
 		mcp.WithDescription("Send a prompt to the LLM"),
 		mcp.WithString("prompt",
@@ -34,7 +34,6 @@ func Start() {
 		),
 	)
 
-	log.Println("Adding agent tool...")
 	list := mcp.NewTool("list",
 		mcp.WithDescription("展示当前目录下的文件"),
 		mcp.WithString("path",
@@ -43,10 +42,19 @@ func Start() {
 		),
 	)
 
+	codeReview := mcp.NewTool("codeReview",
+		mcp.WithDescription("Review the code and provide a list of issues and suggestions for improvement"),
+		mcp.WithString("path",
+			mcp.Required(),
+			mcp.Description("Path to the code to review"),
+		),
+	)
+
 	log.Println("Adding tool handlers...")
 	// Add tool handler
 	s.AddTool(chatbox, handler.ChatboxHandler)
 	s.AddTool(list, handler.ListHandler)
+	s.AddTool(codeReview, handler.CodeReviewHandler)
 
 	// Start the stdio server
 	// Start StreamableHTTP server
