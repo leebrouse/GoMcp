@@ -1,0 +1,9 @@
+{
+    "mcpServers": {
+        "filesystem": {
+            "type": "local",
+            "command": ["go", "run", "./internal/cmd/main.go"],
+            "args":[]
+        }
+    }
+  }
