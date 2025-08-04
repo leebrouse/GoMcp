@@ -4,10 +4,15 @@ import (
 	"fmt"
 	"log"
 
-	mcpServer "github.com/leebrouse/GoMcp/internal/common/config/server"
 	"github.com/leebrouse/GoMcp/internal/llm/handler"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	"github.com/spf13/viper"
+)
+
+var (
+	LLMServerName    = viper.GetString("mcpServer.llm.serverName")
+	LLMServerVersion = viper.GetString("mcpServer.llm.serverVersion")
 )
 
 func main() {
@@ -17,13 +22,14 @@ func main() {
 
 }
 
+// StartLLM starts the LLM MCP server
 func StartLLM() {
 
 	log.Println("Starting MCP server...")
 	// Create a new MCP server
 	s := server.NewMCPServer(
-		mcpServer.LLMServerName,
-		mcpServer.LLMServerVersion,
+		LLMServerName,
+		LLMServerVersion,
 		server.WithToolCapabilities(true),
 	)
 

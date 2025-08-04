@@ -4,10 +4,15 @@ import (
 	"fmt"
 	"log"
 
-	mcpServer "github.com/leebrouse/GoMcp/internal/common/config/server"
 	"github.com/leebrouse/GoMcp/internal/file/handler"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	"github.com/spf13/viper"
+)
+
+var (
+	FileServerName    = viper.GetString("mcpServer.file.serverName")
+	FileServerVersion = viper.GetString("mcpServer.file.serverVersion")
 )
 
 func main() {
@@ -21,8 +26,8 @@ func StartFile() {
 	log.Println("Starting MCP server...")
 	// Create a new MCP server
 	s := server.NewMCPServer(
-		mcpServer.FileServerName,
-		mcpServer.FileServerVersion,
+		FileServerName,
+		FileServerVersion,
 		server.WithToolCapabilities(true),
 	)
 

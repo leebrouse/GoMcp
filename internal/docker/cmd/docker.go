@@ -4,10 +4,15 @@ import (
 	"fmt"
 	"log"
 
-	mcpServer "github.com/leebrouse/GoMcp/internal/common/config/server"
 	"github.com/leebrouse/GoMcp/internal/docker/handler"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	"github.com/spf13/viper"
+)
+
+var (
+	DockerServerName    = viper.GetString("mcpServer.docker.serverName")
+	DockerServerVersion = viper.GetString("mcpServer.docker.serverVersion")
 )
 
 func main() {
@@ -17,13 +22,14 @@ func main() {
 
 }
 
+// StartDocker starts the Docker MCP server
 func StartDocker() {
 
 	log.Println("Starting Docker MCP server...")
 	// Create a new MCP server
 	s := server.NewMCPServer(
-		mcpServer.DockerServerName,
-		mcpServer.DockerServerVersion,
+		DockerServerName,
+		DockerServerVersion,
 		server.WithToolCapabilities(true),
 	)
 
