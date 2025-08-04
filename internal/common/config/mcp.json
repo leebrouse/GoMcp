@@ -2,17 +2,17 @@
     "mcpServers": {
         "file": {
             "type": "local",
-            "command": ["go", "run", "./internal/cmd/file/file.go"],
+            "command": ["go", "run", "./internal/file/cmd/file.go"],
             "args":[]
         },
         "docker": {
             "type": "local",
-            "command": ["go", "run", "./internal/cmd/docker/docker.go"],
+            "command": ["go", "run", "./internal/docker/cmd/docker.go"],
             "args":[]
         },
         "llm": {
             "type": "local",
-            "command": ["go", "run", "./internal/cmd/LLm/llm.go"],
+            "command": ["go", "run", "./internal/llm/cmd/llm.go"],
             "args":[]
         }
     }

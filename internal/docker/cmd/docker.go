@@ -1,26 +1,29 @@
-package server
+package main
 
 import (
 	"fmt"
 	"log"
 
-	"github.com/leebrouse/GoMcp/internal/server/handler"
+	mcpServer "github.com/leebrouse/GoMcp/internal/common/config/server"
+	"github.com/leebrouse/GoMcp/internal/docker/handler"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
 
-const (
-	DockerServerName    = "docker-server"
-	DockerServerVersion = "1.0.0"
-)
+func main() {
+
+	log.Println("Starting docker server...")
+	StartDocker()
+
+}
 
 func StartDocker() {
 
 	log.Println("Starting Docker MCP server...")
 	// Create a new MCP server
 	s := server.NewMCPServer(
-		DockerServerName,
-		DockerServerVersion,
+		mcpServer.DockerServerName,
+		mcpServer.DockerServerVersion,
 		server.WithToolCapabilities(true),
 	)
 
@@ -35,7 +38,6 @@ func StartDocker() {
 	)
 
 	log.Println("Adding tool handlers...")
-	// Add tool handler
 	s.AddTool(docker, handler.DockerHandler)
 
 	// Start the stdio server

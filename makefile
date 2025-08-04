@@ -8,11 +8,11 @@ client:
 
 # start mcp server
 start:
-	mcp-inspector go run ./internal/cmd/main.go
+	mcp-inspector go run ./internal/common/config/mcp.json
 
 # start mcphost
 mcphost:
-	mcphost --config ./internal/config/mcp.json -m google:gemini-2.5-flash
+	mcphost --config ./internal/common/config/mcp.json -m google:gemini-2.5-flash
 
 # set google api key
 set-key:
