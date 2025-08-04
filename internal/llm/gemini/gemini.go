@@ -6,7 +6,6 @@ import (
 
 	"github.com/leebrouse/GoMcp/internal/common/model"
 	"github.com/leebrouse/GoMcp/internal/llm"
-	"github.com/mark3labs/mcp-go/mcp"
 	"google.golang.org/genai"
 )
 
@@ -49,26 +48,6 @@ func (llm *GeminiLLM) GenerateText(ctx context.Context, prompt string) (string, 
 
 }
 
-// GenerateWithTools generates result using the Gemini model with tools by the rest api
-func (llm *GeminiLLM) GenerateWithTools(ctx context.Context, prompt string, tools []mcp.Tool) (string, error) {
-	// client, err := genai.NewClient(ctx, &genai.ClientConfig{
-	// 	APIKey:  llm.ApiKey,
-	// 	Backend: genai.BackendGeminiAPI,
-	// })
-	// if err != nil {
-	// 	return fmt.Sprintf("Error initializing client: %v", err), err
-	// }
+// func (llm *GeminiLLM) DocumentUnderstanding(ctx context.Context, prompt string, filePath string) (string, error) {
 
-	// result, err := client.Models.(
-	// 	ctx,
-	// 	llm.Model,
-	// 	genai.Text(prompt),
-	// 	nil,
-	// )
-	// if err != nil {
-	// 	return fmt.Sprintf("Error generating content: %v", err), err
-	// }
-
-	// return result.Text(), nil
-	return "", nil
-}
+// }

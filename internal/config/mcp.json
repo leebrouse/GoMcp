@@ -1,8 +1,18 @@
 {
     "mcpServers": {
-        "filesystem": {
+        "file": {
             "type": "local",
-            "command": ["go", "run", "./internal/cmd/main.go"],
+            "command": ["go", "run", "./internal/cmd/file/file.go"],
+            "args":[]
+        },
+        "docker": {
+            "type": "local",
+            "command": ["go", "run", "./internal/cmd/docker/docker.go"],
+            "args":[]
+        },
+        "llm": {
+            "type": "local",
+            "command": ["go", "run", "./internal/cmd/LLm/llm.go"],
             "args":[]
         }
     }

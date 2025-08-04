@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/leebrouse/GoMcp/internal/llm/gemini"
@@ -79,6 +80,50 @@ func CodeReviewHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.C
 	}
 
 	return newTextResult(response, false), nil
+}
+
+
+
+
+// document understanding handler
+// func DocumentUnderstandingHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+// 	arguments := request.GetArguments()
+// 	prompt, ok := arguments["prompt"].(string)
+// 	if !ok {
+// 		return newTextResult("Error: prompt parameter is required and must be a string", true), nil
+// 	}
+
+// 	fileUrl, ok := arguments["fileUrl"].(string)
+// 	if !ok {
+// 		return newTextResult("Error: fileUrl parameter is required and must be a string", true), nil
+// 	}
+
+// 	// init llm
+// 	llm := gemini.NewGeminiLLM(geminiApiKey, geminiModel)
+
+// 	response, err := llm.DocumentUnderstanding(ctx, prompt, fileUrl)
+// 	if err != nil {
+// 		return newTextResult(fmt.Sprintf("Error: %v", err), true), nil
+// 	}
+
+// 	return newTextResult(response, false), nil
+// }
+
+// docker handler
+func DockerHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	arguments := request.GetArguments()
+	image, ok := arguments["image"].(string)
+	if !ok {
+		return newTextResult("Error: image parameter is required and must be a string", true), nil
+	}
+
+	// run docker image
+	err := exec.Command("docker", "run", image).Run()
+	if err != nil {
+		return newTextResult(fmt.Sprintf("Error: %v", err), true), nil
+	}
+
+	return newTextResult(fmt.Sprintf("Docker image %s run successfully", image), false), nil
 }
 
 // Helper function to create a new text result

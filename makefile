@@ -13,3 +13,7 @@ start:
 # start mcphost
 mcphost:
 	mcphost --config ./internal/config/mcp.json -m google:gemini-2.5-flash
+
+# set google api key
+set-key:
+	export GOOGLE_API_KEY='AIzaSyCKURVV8jEX3CsRu_4pysxmJm3IH4mr8VU'
