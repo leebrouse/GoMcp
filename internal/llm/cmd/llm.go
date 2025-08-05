@@ -1,11 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/leebrouse/GoMcp/internal/llm/handler"
-	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/leebrouse/GoMcp/internal/common/factory/tools" // 注册所有工具
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/spf13/viper"
 )
@@ -16,50 +15,43 @@ var (
 )
 
 func main() {
-	log.Println("Starting llm server...")
-
-	StartLLM()
-
+	log.Println("Starting LLM server...")
+	if err := StartLLM(); err != nil {
+		panic(err)
+	}
 }
 
-// StartLLM starts the LLM MCP server
-func StartLLM() {
+func StartLLM() error {
+	log.Println("Creating MCP server...")
 
-	log.Println("Starting MCP server...")
-	// Create a new MCP server
 	s := server.NewMCPServer(
 		LLMServerName,
 		LLMServerVersion,
 		server.WithToolCapabilities(true),
 	)
 
-	// Define a simple tool
-	log.Println("Adding chatbox tool...")
-	chatbox := mcp.NewTool("chatbox",
-		mcp.WithDescription("Send a prompt to the LLM"),
-		mcp.WithString("prompt",
-			mcp.Required(),
-			mcp.Description("Prompt to send to the LLM"),
-		),
-	)
+	// 自动注册所有工具并添加对应处理器
+	for _, tool := range tools.GetAllTools() {
+		var handlerFunc server.ToolHandlerFunc
 
-	codeReview := mcp.NewTool("codeReview",
-		mcp.WithDescription("Review the code and provide a list of issues and suggestions for improvement"),
-		mcp.WithString("path",
-			mcp.Required(),
-			mcp.Description("Path to the code to review"),
-		),
-	)
+		switch tool.GetName() {
+		case "chatbox":
+			handlerFunc = handler.ChatboxHandler
+		case "codeReview":
+			handlerFunc = handler.CodeReviewHandler
+		default:
+			log.Printf("No handler found for tool: %s", tool.GetName())
+			continue
+		}
 
-	// Add tool handler
-	s.AddTool(chatbox, handler.ChatboxHandler)
-	s.AddTool(codeReview, handler.CodeReviewHandler)
-
-	// Start the stdio server
-	// Start StreamableHTTP server
-	log.Println("Starting MCP server...")
-	if err := server.ServeStdio(s); err != nil {
-		fmt.Printf("Server error: %v\n", err)
+		s.AddTool(tool, handlerFunc)
+		log.Printf("Tool registered: %s", tool.GetName())
 	}
 
+	// 启动服务
+	if err := server.ServeStdio(s); err != nil {
+		return err
+	}
+
+	return nil
 }
