@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/leebrouse/GoMcp/internal/file/handler"
-	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/leebrouse/GoMcp/internal/file/factory/tools"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/spf13/viper"
 )
@@ -17,11 +16,12 @@ var (
 
 func main() {
 	log.Println("Starting file server...")
-	StartFile()
-
+	if err := StartFile(); err != nil {
+		panic(err)
+	}
 }
 
-func StartFile() {
+func StartFile() error {
 
 	log.Println("Starting MCP server...")
 	// Create a new MCP server
@@ -31,23 +31,14 @@ func StartFile() {
 		server.WithToolCapabilities(true),
 	)
 
-	list := mcp.NewTool("list",
-		mcp.WithDescription("展示当前目录下的文件"),
-		mcp.WithString("path",
-			mcp.Required(),
-			mcp.Description("Path to the directory to list"),
-		),
-	)
-
-	log.Println("Adding tool handlers...")
-
-	// Add tool handler
-	// Tip should use tools
-	s.AddTool(list, handler.ListHandler)
+	// Create tool pool and auto register tools
+	tools := tools.CreatToolPool()
+	s.AddTools(tools...)
 
 	log.Println("Starting MCP server...")
 	if err := server.ServeStdio(s); err != nil {
 		fmt.Printf("Server error: %v\n", err)
 	}
 
+	return nil
 }

@@ -9,6 +9,7 @@ func init() {
 	RegisterTool("codeReview", newCodeReviewTool)
 }
 
+/*llm mcp server */
 // chatbox tool
 func newChatboxTool() mcp.Tool {
 	return mcp.NewTool("chatbox",
