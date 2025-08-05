@@ -5,7 +5,7 @@ mcpServer:
 
   file:
     serverName : "file-server"
-    serverVersion: "1.0.0"
+    serverVersion : "1.0.0"
 
   llm:
     serverName : "llm-server"
@@ -13,5 +13,5 @@ mcpServer:
 
 llm:
   gemini:
-    apikey: "${GOOGLE_API_KEY}"
-    model: "gemini-2.0-flash"
+    apikey : "${GOOGLE_API_KEY}"
+    model : "gemini-2.0-flash"

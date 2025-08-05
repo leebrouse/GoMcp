@@ -40,6 +40,9 @@ func StartFile() {
 	)
 
 	log.Println("Adding tool handlers...")
+
+	// Add tool handler
+	// Tip should use tools
 	s.AddTool(list, handler.ListHandler)
 
 	log.Println("Starting MCP server...")

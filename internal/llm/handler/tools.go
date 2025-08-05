@@ -4,16 +4,15 @@ import (
 	"context"
 	"fmt"
 	"os"
-
+	
 	"github.com/leebrouse/GoMcp/internal/common/llm/gemini"
 	"github.com/leebrouse/GoMcp/utils/custom"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/spf13/viper"
 )
 
 var (
-	GeminiApiKey = viper.GetString("llm.gemini.apikey")
-	GeminiModel  = viper.GetString("llm.gemini.model")
+	GeminiApiKey = "AIzaSyCKURVV8jEX3CsRu_4pysxmJm3IH4mr8VU"
+	GeminiModel  = "gemini-2.0-flash"
 )
 
 // chatbox handler

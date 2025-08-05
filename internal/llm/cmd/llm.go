@@ -43,7 +43,6 @@ func StartLLM() {
 		),
 	)
 
-
 	codeReview := mcp.NewTool("codeReview",
 		mcp.WithDescription("Review the code and provide a list of issues and suggestions for improvement"),
 		mcp.WithString("path",
@@ -52,11 +51,9 @@ func StartLLM() {
 		),
 	)
 
-
 	// Add tool handler
 	s.AddTool(chatbox, handler.ChatboxHandler)
 	s.AddTool(codeReview, handler.CodeReviewHandler)
-
 
 	// Start the stdio server
 	// Start StreamableHTTP server
