@@ -2,7 +2,6 @@ package gemini
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -53,7 +52,7 @@ func (llm *GeminiLLM) GenerateText(ctx context.Context, prompt string) (string, 
 
 // Embeding prompt form string to byte for the RAG system
 // Tips: Role means——
-func (llm *GeminiLLM) Embeding(ctx context.Context, prompt string, role genai.Role) (string, error) {
+func (llm *GeminiLLM) Embeding(ctx context.Context, prompt string, role genai.Role) ([]float32, error) {
 	client, err := genai.NewClient(ctx, nil)
 	if err != nil {
 		log.Fatal(err)
@@ -71,13 +70,19 @@ func (llm *GeminiLLM) Embeding(ctx context.Context, prompt string, role genai.Ro
 		nil,
 	)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	embeddings, err := json.MarshalIndent(result.Embeddings, "", "  ")
-	if err != nil {
-		return "", err
+	// Convert embeddings to []float32
+	if len(result.Embeddings) == 0 {
+		return nil, fmt.Errorf("no embeddings returned")
 	}
 
-	return string(embeddings), nil
+	embedding := result.Embeddings[0]
+	values := make([]float32, len(embedding.Values))
+	for i, v := range embedding.Values {
+		values[i] = float32(v)
+	}
+
+	return values, nil
 }

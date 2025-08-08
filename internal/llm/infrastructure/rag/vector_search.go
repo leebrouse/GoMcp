@@ -1,9 +1,9 @@
 // using TiDB as vector database 
 package rag
 
-type RAGRepository struct{}
+type RAG struct{}
 
-func (r *RAGRepository) Search(query string) string {
+func (r *RAG) Search(query string) string {
 	// 向量搜索逻辑
 	return "search result"
 }
