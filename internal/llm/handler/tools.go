@@ -4,15 +4,16 @@ import (
 	"context"
 	"fmt"
 	"os"
-	
+
 	"github.com/leebrouse/GoMcp/internal/common/llm/gemini"
 	"github.com/leebrouse/GoMcp/utils/custom"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 var (
-	GeminiApiKey = "AIzaSyCKURVV8jEX3CsRu_4pysxmJm3IH4mr8VU"
-	GeminiModel  = "gemini-2.0-flash"
+	GeminiApiKey   = "AIzaSyCKURVV8jEX3CsRu_4pysxmJm3IH4mr8VU"
+	GeminiModel    = "gemini-2.0-flash"
+	GeminiEmbedder = "gemini-embedding-001"
 )
 
 // chatbox handler
@@ -24,7 +25,7 @@ func ChatboxHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.Call
 	}
 
 	// TODO: Should read from the config file or the request
-	llm := gemini.NewGeminiLLM(GeminiApiKey, GeminiModel)
+	llm := gemini.NewGeminiLLM(GeminiApiKey, GeminiModel, GeminiEmbedder)
 
 	response, err := llm.GenerateText(ctx, prompt)
 	if err != nil {
@@ -48,7 +49,7 @@ func CodeReviewHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.C
 	}
 
 	// init llm
-	llm := gemini.NewGeminiLLM(GeminiApiKey, GeminiModel)
+	llm := gemini.NewGeminiLLM(GeminiApiKey, GeminiModel, GeminiEmbedder)
 
 	prompt := fmt.Sprintf("Review the following code and provide a list of issues and suggestions for improvement. Return the results in a JSON object with the following fields: 'issues', 'suggestions', 'score'. The score should be a number between 0 and 100. The issues and suggestions should be an array of strings. The code is: %s", string(code))
 	response, err := llm.GenerateText(ctx, prompt)
@@ -58,3 +59,5 @@ func CodeReviewHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.C
 
 	return custom.NewTextResult(response, false), nil
 }
+
+// embad prompt for to vector search from the TiDB 

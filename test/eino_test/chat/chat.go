@@ -1,4 +1,4 @@
-package main
+package chat
 
 import (
 	"context"
@@ -8,6 +8,7 @@ import (
 	"github.com/cloudwego/eino/schema"
 )
 
+// Generate generates a message from a chat model
 func Generate(ctx context.Context, llm model.ToolCallingChatModel, in []*schema.Message) *schema.Message {
 	result, err := llm.Generate(ctx, in)
 	if err != nil {
@@ -15,7 +16,8 @@ func Generate(ctx context.Context, llm model.ToolCallingChatModel, in []*schema.
 	}
 	return result
 }
-	
+
+// Stream streams a message from a chat model
 func Stream(ctx context.Context, llm model.ToolCallingChatModel, in []*schema.Message) *schema.StreamReader[*schema.Message] {
 	result, err := llm.Stream(ctx, in)
 	if err != nil {

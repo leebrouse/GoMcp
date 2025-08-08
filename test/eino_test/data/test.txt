@@ -1,0 +1,15 @@
+你想让 PDF 解析器读取你指定的 path（比如 `test/eino_test/data/Kubernetes in Action (Marko Luksa) (Z-Library).pdf`），而不是写死的路径。推荐做法是通过命令行参数传递 path。
+
+下面是简洁的修改方案：
+
+1. 导入 `"os"` 包（如果未导入）。
+2. 获取命令行参数 `os.Args`，如果有参数就用参数，否则用默认路径。
+
+我将帮你修改 main 函数实现这个功能。
+已完成修改：现在你可以通过命令行参数传入 PDF 文件路径，例如：
+
+```bash
+go run pdf.go /your/path/to/file.pdf
+```
+
+如果没有传参数，则默认读取 `test/eino_test/data/Kubernetes in Action (Marko Luksa) (Z-Library).pdf`。这样更灵活，适合不同文件路径的需求。

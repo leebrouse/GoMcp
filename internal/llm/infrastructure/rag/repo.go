@@ -1,3 +1,4 @@
+// using TiDB as vector database 
 package rag
 
 type RAGRepository struct{}

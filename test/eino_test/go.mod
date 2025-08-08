@@ -7,6 +7,8 @@ require (
 	github.com/cloudwego/eino-ext/components/model/gemini v0.1.3
 )
 
+require github.com/dslipak/pdf v0.0.2 // indirect
+
 require (
 	cloud.google.com/go v0.116.0 // indirect
 	cloud.google.com/go/auth v0.9.3 // indirect
@@ -14,6 +16,8 @@ require (
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
+	github.com/cloudwego/eino-ext/components/document/loader/file v0.0.0-20250804092122-8845979a2228
+	github.com/cloudwego/eino-ext/components/document/parser/pdf v0.0.0-20250804092122-8845979a2228
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/getkin/kin-openapi v0.118.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect

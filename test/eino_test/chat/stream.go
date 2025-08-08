@@ -1,4 +1,4 @@
-package main
+package chat
 
 import (
 	"io"
@@ -7,6 +7,7 @@ import (
 	"github.com/cloudwego/eino/schema"
 )
 
+// ReportStream reports a stream of messages
 func ReportStream(sr *schema.StreamReader[*schema.Message]) {
 	defer sr.Close()
 

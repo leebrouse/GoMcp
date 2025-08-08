@@ -17,7 +17,8 @@ func DockerHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallT
 		return custom.NewTextResult("Error: image parameter is required and must be a string", true), nil
 	}
 
-	// run docker image
+	// run docker image 
+	// tips：should write in the service layer
 	err := exec.Command("docker", "run", image).Run()
 	if err != nil {
 		return custom.NewTextResult(fmt.Sprintf("Error: %v", err), true), nil

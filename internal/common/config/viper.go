@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// init initializes Viper configuration when the package is imported.
 func init() {
 	if err := NewViperConfig(); err != nil {
 		panic(err)
@@ -19,7 +20,8 @@ func init() {
 
 var once sync.Once
 
-// using single pattern as a sharing config function
+// NewViperConfig initializes the global Viper configuration exactly once.
+// It is safe to call this function multiple times from different places.
 func NewViperConfig() (err error) {
 	once.Do(func() {
 		err = newViperConfig()
@@ -27,6 +29,10 @@ func NewViperConfig() (err error) {
 	return
 }
 
+// newViperConfig sets up Viper with:
+// - config name/type and search path resolved relative to the caller
+// - environment variable overrides (e.g. GOOGLE_API_KEY)
+// - reads the config file into memory
 func newViperConfig() error {
 	relPath, err := getRelativePathFromCaller()
 	if err != nil {
@@ -35,12 +41,21 @@ func newViperConfig() error {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(relPath)
+
+	// Replace underscores with hyphens for env-to-key mapping
+	// Example: LLM_GEMINI_APIKEY -> llm-gemini-apikey
 	viper.EnvKeyReplacer(strings.NewReplacer("_", "-"))
 	viper.AutomaticEnv()
+
+	// Bind GOOGLE_API_KEY to config key: llm.gemini.apikey
 	_ = viper.BindEnv("llm.gemini.apikey", "GOOGLE_API_KEY")
 	return viper.ReadInConfig()
 }
 
+// getRelativePathFromCaller computes the config search path
+// relative to the current working directory and the file location
+// of this package, to make config discovery stable in different
+// execution contexts (tests, binaries, IDE run, etc.).
 func getRelativePathFromCaller() (relPath string, err error) {
 	callerPwd, err := os.Getwd()
 	if err != nil {

@@ -1,5 +1,5 @@
-package main
-
+package chat
+	
 import (
 	"context"
 	"log"
@@ -8,6 +8,7 @@ import (
 	"github.com/cloudwego/eino/schema"
 )
 
+// CreateTemplate creates a template for the chat model
 func CreateTemplate() prompt.ChatTemplate {
 	// 创建模板，使用 FString 格式
 	return prompt.FromMessages(schema.FString,
@@ -22,6 +23,7 @@ func CreateTemplate() prompt.ChatTemplate {
 	)
 }
 
+// CreateMessagesFromTemplate creates messages from a template
 func CreateMessagesFromTemplate() []*schema.Message {
 	template := CreateTemplate()
 
@@ -41,5 +43,6 @@ func CreateMessagesFromTemplate() []*schema.Message {
 	if err != nil {
 		log.Fatalf("format template failed: %v\n", err)
 	}
+	
 	return messages
 }

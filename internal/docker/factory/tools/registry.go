@@ -4,6 +4,7 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
+// auto init docker tool
 func init() {
 	RegisterTool("docker", newDockerTool)
 }
