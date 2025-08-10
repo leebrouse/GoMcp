@@ -55,7 +55,7 @@ type EmbeddedDocument struct {
 
 func main() {
 	// TiDB 云端数据库连接串，注意替换为你的真实账号密码和地址
-	// format(Totally 3 arguments to be coonfiged): 1.usernmae 2.password 3. ip address
+	// format(Totally 3 arguments to be configed): 1.usernmae 2.password 3. ip address
 	dsn := "kC45oJcMFwADSBQ.root:TgZ5oJm3IH4mr8VU@tcp(gateway01.eu-central-1.prod.aws.tidbcloud.com:4000)/test?charset=utf8mb4&parseTime=True&loc=Local&tls=true"
 
 	// 打开数据库连接
