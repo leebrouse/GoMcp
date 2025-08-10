@@ -15,7 +15,7 @@ func main() {
 	searchTool, _ := duckduckgo.New(5, "LangChainGo/1.0")
 
 	// 执行搜索
-	query := "Who won the Euro 2024?"
+	query := "字节跳动"
 	result, err := searchTool.Call(ctx, query)
 	if err != nil {
 		log.Fatalf("搜索失败: %v", err)
