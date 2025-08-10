@@ -60,4 +60,31 @@ func CodeReviewHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.C
 	return custom.NewTextResult(response, false), nil
 }
 
-// embad prompt for to vector search from the TiDB 
+// Read document handler
+func ReadDocument(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	arguments := request.GetArguments()
+	//get path
+	path, ok := arguments["path"].(string)
+	if !ok {
+		return custom.NewTextResult("Error: path parameter is required and must be a string", true), nil
+	}
+
+	//get prompt
+	prompt, ok := arguments["prompt"].(string)
+	if !ok {
+		return custom.NewTextResult("Error: prompt parameter is required and must be a string", true), nil
+	}
+
+	// init llm
+	llm := gemini.NewGeminiLLM(GeminiApiKey, GeminiModel, GeminiEmbedder)
+
+	// call ReadDocument function by interface
+	response, err := llm.ReadDocument(ctx, path, prompt)
+	if err != nil {
+		return custom.NewTextResult(fmt.Sprintf("Error: %v", err), true), nil
+	}
+
+	return custom.NewTextResult(response, false), nil
+}
+
+//Todo: embad prompt for to vector search from the TiDB

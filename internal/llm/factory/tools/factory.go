@@ -22,6 +22,8 @@ func CreatToolPool() []server.ServerTool {
 			handlerFunc = handler.ChatboxHandler
 		case "codeReview":
 			handlerFunc = handler.CodeReviewHandler
+		case "readDocument":
+			handlerFunc = handler.ReadDocument
 		default:
 			log.Printf("No handler found for tool: %s", tool.GetName())
 			continue

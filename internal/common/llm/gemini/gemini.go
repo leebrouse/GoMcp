@@ -50,6 +50,43 @@ func (llm *GeminiLLM) GenerateText(ctx context.Context, prompt string) (string, 
 
 }
 
+// Read local PDF and do operation using the Gemini model
+func (llm *GeminiLLM) ReadDocument(ctx context.Context, path string, prompt string) (string, error) {
+
+	client, err := genai.NewClient(ctx, &genai.ClientConfig{
+		APIKey:  llm.ApiKey,
+		Backend: genai.BackendGeminiAPI,
+	})
+	if err != nil {
+		return fmt.Sprintf("Error initializing client: %v", err), err
+	}
+
+	// localPdfPath := "./Kubernetes in Action (Marko Luksa) (Z-Library).pdf"
+
+	uploadConfig := &genai.UploadFileConfig{MIMEType: "application/pdf"}
+	uploadedFile, _ := client.Files.UploadFromPath(ctx, path, uploadConfig)
+
+	promptParts := []*genai.Part{
+		genai.NewPartFromURI(uploadedFile.URI, uploadedFile.MIMEType),
+		genai.NewPartFromText(prompt),
+	}
+	contents := []*genai.Content{
+		genai.NewContentFromParts(promptParts, genai.RoleUser),
+	}
+
+	result, err := client.Models.GenerateContent(
+		ctx,
+		llm.Model,
+		contents,
+		nil,
+	)
+	if err != nil {
+		return fmt.Sprintf("Error Generate Content: %v", err), err
+	}
+
+	return result.Text(), nil
+}
+
 // Embeding prompt form string to byte for the RAG system
 // Tips: Role means——
 func (llm *GeminiLLM) Embeding(ctx context.Context, prompt string, role genai.Role) ([]float32, error) {
