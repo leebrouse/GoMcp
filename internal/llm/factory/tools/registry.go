@@ -11,7 +11,7 @@ func init() {
 	RegisterTool("duckduckgo", newDuckDuckGo)
 }
 
-/*llm mcp server */
+/*llm mcp tool */
 // chatbox tool
 func newChatboxTool() mcp.Tool {
 	return mcp.NewTool("chatbox",

@@ -8,6 +8,7 @@ import (
 	"github.com/robermar23/langchaingo/tools/duckduckgo"
 )
 
+//
 type SearchEngin struct {
 	maxResult int
 	userAgent string
