@@ -16,5 +16,6 @@ type LLM interface {
 
 	// Embeding text to vector val
 	Embeding(ctx context.Context, prompt string, role genai.Role) ([]float32, error)
+
 	// To do more functions like image generation, etc....
 }

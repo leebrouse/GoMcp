@@ -7,6 +7,7 @@ import (
 
 	"github.com/leebrouse/GoMcp/internal/common/llm"
 	"github.com/leebrouse/GoMcp/internal/common/model"
+	"github.com/robermar23/langchaingo/tools/duckduckgo"
 	"google.golang.org/genai"
 )
 
@@ -87,8 +88,25 @@ func (llm *GeminiLLM) ReadDocument(ctx context.Context, path string, prompt stri
 	return result.Text(), nil
 }
 
+// Search info from the duckduckgo
+func (llm *GeminiLLM) DuckDuckGoSearch(ctx context.Context, keyword string) (string, error) {
+	// create DuckDuckGo search tool
+	searchTool, err := duckduckgo.New(5, "LangChainGo/1.0")
+	if err != nil {
+		return fmt.Sprintf("Error init a new DuckDuckGo Search tool : %v", err), err
+	}
+
+	// execute searching
+	result, err := searchTool.Call(ctx, keyword)
+	if err != nil {
+		return fmt.Sprintf("Fail to Search info by using DuckDuckGo: %v", err), err
+	}
+
+	// return result
+	return result, nil
+}
+
 // Embeding prompt form string to byte for the RAG system
-// Tips: Role means——
 func (llm *GeminiLLM) Embeding(ctx context.Context, prompt string, role genai.Role) ([]float32, error) {
 	client, err := genai.NewClient(ctx, nil)
 	if err != nil {

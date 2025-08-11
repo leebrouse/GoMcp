@@ -6,11 +6,14 @@ import (
 	"os"
 
 	"github.com/leebrouse/GoMcp/internal/common/llm/gemini"
+	"github.com/leebrouse/GoMcp/internal/llm/infrastructure/search"
 	"github.com/leebrouse/GoMcp/utils/custom"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-var (
+// private config
+// Tips: The config should be set in the global.yaml not in the code, TEST to resolve it yet 
+const (
 	GeminiApiKey   = "AIzaSyCKURVV8jEX3CsRu_4pysxmJm3IH4mr8VU"
 	GeminiModel    = "gemini-2.0-flash"
 	GeminiEmbedder = "gemini-embedding-001"
@@ -27,6 +30,35 @@ func ChatboxHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.Call
 	// TODO: Should read from the config file or the request
 	llm := gemini.NewGeminiLLM(GeminiApiKey, GeminiModel, GeminiEmbedder)
 
+	response, err := llm.GenerateText(ctx, prompt)
+	if err != nil {
+		return custom.NewTextResult(fmt.Sprintf("Error: %v", err), true), nil
+	}
+
+	return custom.NewTextResult(response, false), nil
+}
+
+// enhanced "chatbox handler" because of add search information from the DuckDuckGo
+func DuckDuckGoChatboxHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	arguments := request.GetArguments()
+	keyword, ok := arguments["keyword"].(string)
+	if !ok {
+		return custom.NewTextResult("Error: keyword parameter is required and must be a string", true), nil
+	}
+
+	// create DuckDuckGo client
+	duckduckgo := search.NewDuckDuckGo(5, "LangChainGo/1.0")
+
+	// search information from the DuckDuckGo and get reference
+	reference, err := duckduckgo.DuckDuckGoSearch(ctx, keyword)
+	if err != nil {
+		return custom.NewTextResult(fmt.Sprintf("Error: %v", err), true), nil
+	}
+
+	// create gemini client
+	llm := gemini.NewGeminiLLM(GeminiApiKey, GeminiModel, GeminiEmbedder)
+	// creata a new prompt attached to the DuckDuckGo reference
+	prompt := fmt.Sprintf("Test prompt", reference)
 	response, err := llm.GenerateText(ctx, prompt)
 	if err != nil {
 		return custom.NewTextResult(fmt.Sprintf("Error: %v", err), true), nil
@@ -61,7 +93,7 @@ func CodeReviewHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.C
 }
 
 // Read document handler
-func ReadDocument(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+func ReadDocumentHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	arguments := request.GetArguments()
 	//get path
 	path, ok := arguments["path"].(string)
