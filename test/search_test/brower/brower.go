@@ -26,5 +26,5 @@ func main() {
 	}
 	fmt.Println(result)
 	time.Sleep(10 * time.Second)
-	//but.Cleanup()
+	but.Cleanup()
 }

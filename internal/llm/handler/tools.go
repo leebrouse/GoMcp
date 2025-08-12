@@ -29,6 +29,7 @@ func ChatboxHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.Call
 		return custom.NewTextResult("Error: prompt parameter is required and must be a string", true), nil
 	}
 
+	//Service
 	// TODO: Should read from the config file or the request
 	llm := gemini.NewGeminiLLM(GeminiApiKey, GeminiModel, GeminiEmbedder)
 
@@ -49,7 +50,6 @@ func DuckDuckGoChatboxHandler(ctx context.Context, request mcp.CallToolRequest) 
 	}
 
 	// Service: To do research process
-
 	// create DuckDuckGo client
 	duckduckgo := search.NewDuckDuckGo(5, "LangChainGo/1.0")
 
@@ -68,16 +68,8 @@ func DuckDuckGoChatboxHandler(ctx context.Context, request mcp.CallToolRequest) 
 		return custom.NewTextResult(fmt.Sprintf("Error to get new prompt: %v", err), true), nil
 	}
 
-	// prompt := fmt.Sprintf(
-	// 	"你是一名专业的研究助理。\n\n"+
-	// 		"下面这段文字是 DuckDuckGo 返回的原始参考内容，请仅基于它进行回答，不要添加任何超出原文的信息。\n"+
-	// 		"如果原文无法回答用户问题，请直接说明“资料不足”。\n\n"+
-	// 		"参考内容：\n%s\n\n"+
-	// 		"请用简洁、连贯的中文总结上述内容，并指出其中最重要的 3 个要点。",
-	// 	reference,
-	// )
-	// generate a text by using the gemini api
 
+	// generate a text by using the gemini api
 	response, err := llm.GenerateText(ctx, prompt)
 	if err != nil {
 		return custom.NewTextResult(fmt.Sprintf("Error: %v", err), true), nil
